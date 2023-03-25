@@ -9,40 +9,36 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors());
 
+//API Land
 app.get('/', (req, res) => {
   res.send('Hello World')
 })
-
+//Localhost:3000
 app.listen(3000, () => {
   console.log('Start server at port 3000.')
 })
-
-app.get('/log', (req, res) => {
+// get all from database
+app.get('/msglog', (req, res) => {
   res.json(db)
 })
-
-app.get('/log/:id', (req, res) => {
+// get from id
+app.get('/msglog/:id', (req, res) => {
   res.json(db.find(num => num.id === req.params.id))
 })
-
-app.post('/log', (req, res) => {
+// save to db
+app.post('/msglog', (req, res) => {
   db.push(req.body)
   WriteFile(db)
   res.status(201).json(req.body)
 })
-
-app.delete('/log/:id', (req, res) => {
+// delete by ID
+app.delete('/msglog/:id', (req, res) => {
   const deletedIndex = db.findIndex(num => num.id === req.params.id)
   db.splice(deletedIndex, 1)
   WriteFile(db)
   res.status(204).send()
 })
-
-app.put('/log/:id', (req, res) => {
-  const updateIndex = db.findIndex(num => num.id === req.params.id)
-  res.json(Object.assign(db[updateIndex], req.body))
-})
-
+// Write to DB
 function WriteFile(obj){
   var jsonContent = JSON.stringify(obj);
   console.log(jsonContent);
